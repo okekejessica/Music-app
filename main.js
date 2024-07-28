@@ -1,4 +1,4 @@
-let coverArt = document.querySelector(".cover-art ");
+let coverArt = document.querySelector(".cover-art img");
 let songTitle = document.querySelector("#song-title");
 let songArtiste = document.querySelector("#song-artist");
 let playerProgress = document.querySelector(".player-progress");
@@ -26,30 +26,57 @@ const songs = [
   {
     path: "https://cdn.val9ja.com/wp-content/uploads/2024/07/Spinall_Ft_Omah_Lay_Tyla_-_One_Call.mp3",
     displayName: "One Call",
-    cover: "imgs_audio/img-2.jpg",
+    cover: "https://trendybeatz.com/images/Spinall-One-Call-Artwork.jpg",
     artist: "Spinall Ft. Omah Lay & Tyla",
   },
   {
     path: "https://cdn.val9ja.com/wp-content/uploads/2024/06/Burna_Boy_-_Higher.mp3",
     displayName: "Higher",
-    cover: "imgs_audio/img-3.jpg",
+    cover: "https://trendybeatz.com/images/Burna-Boy-Higher-Video-Artwork.jpg",
     artist: "Burna Boy",
   },
   {
     path: "https://cdn.val9ja.com/wp-content/uploads/2024/06/Brown_Joel_Ft_Davido_Ft_BoyPee_Hyce_-_Ogechi_Remix_.mp3",
     displayName: "Ogechi (Remix) ",
-    cover: "imgs_audio/img-4.jpg",
-    artist: " Brown Joel ft Davido, BoyPee, Hyce",
+    cover:
+      "https://trendybeatz.com/images/Brown-Joel-Ft-BoyPee-and-Hyce-Davido-Ogechi-Remix-Artwork.jpg",
+    artist: " Brown Joel ft Davido",
+  },
+  {
+    path: "https://cdn.trendybeatz.com/audio/Odumeje-Ft-Flavour-Powers-(TrendyBeatz.com).mp3",
+    displayName: "Powers",
+    cover:
+      "https://trendybeatz.com/images/Odumeje-Ft-Flavour-Powers-Artwork.jpg",
+    artist: "Odumeje Ft. Flavour",
+  },
+  {
+    path: "https://cdn.trendybeatz.com/audio/Kcee-Ft-OneRepublic-Ojapiano-Remix-(TrendyBeatz.com).mp3",
+    displayName: "Ojapiano (Remix)",
+    cover: "https://trendybeatz.com/images/Kcee-Ojapiano-Remix-Artwork.jpg",
+    artist: "Kcee Ft. OneRepublic",
+  },
+  {
+    path: "https://cdn.trendybeatz.com/audio/Ruger-Ft-Bnxn-Romeo-Must-Die-RMD-(TrendyBeatz.com).mp3",
+    displayName: "Romeo Must Die",
+    cover:
+      "https://trendybeatz.com/images/Ruger-Ft-Bnxn-Romeo-Must-Die-RMD-Artwork.jpg",
+    artist: "Ruger Ft. Bnxn",
+  },
+  {
+    path: "https://cdn.trendybeatz.com/audio/Khaid-Ft-Boy-Spyce-I-Dont-Care-(TrendyBeatz.com).mp3",
+    displayName: "I Dont Care",
+    cover: "https://trendybeatz.com/images/Boy-Spyce-I-Dont-Care-Artwork.jpg",
+    artist: "Khaid Ft. Boyspice",
   },
 ];
 
 // Set the initial song index
 let currentSongIndex = 0;
+
 // create a global audio object
 let audio = new Audio();
 
 // Update the UI with the current song's information
-
 let interface = () => {
   let currentSong = songs[currentSongIndex];
   songTitle.textContent = currentSong.displayName;
@@ -60,7 +87,6 @@ let interface = () => {
 let playSong = () => {
   let currentSong = songs[currentSongIndex];
   audio.src = currentSong.path;
-  //   let audio = new Audio(currentSong.path);
   audio.play;
 };
 
@@ -85,29 +111,33 @@ const togglePlayPause = () => {
   }
 };
 
-// event listener
+// event listener for buttons
 
+// previous
 previous.addEventListener("click", () => {
   currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
   interface();
   playSong();
 });
 
-// play.addEventListener("click", playSong);
+// play
 play.addEventListener("click", () => {
   togglePlayPause();
 });
 
+// pause
 pause.addEventListener("click", () => {
   togglePlayPause();
 });
 
+// next
 next.addEventListener("click", () => {
   currentSongIndex = (currentSongIndex + 1 + songs.length) % songs.length;
   interface();
   playSong();
 });
 
+// progress
 let updateProgress = () => {
   let currentTime = audio.currentTime;
   let duration = audio.duration;
@@ -121,8 +151,6 @@ let updateProgress = () => {
     currentTimeElement.textContent = formatTime(currentTime);
     durationElement.textContent = formatTime(duration);
   }
-
-
 };
 
 let formatTime = (seconds) => {
@@ -138,3 +166,13 @@ let pad = (number) => {
 // Event listeners
 audio.addEventListener("timeupdate", updateProgress);
 audio.addEventListener("loadeddata", updateProgress);
+
+audio.addEventListener("ended", () => {
+  currentSongIndex = (currentSongIndex + 1 + songs.length) % songs.length;
+  interface();
+  playSong();
+
+  setTimeout(() => {
+    audio.play();
+  }, 100);
+});
